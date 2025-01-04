@@ -76,9 +76,12 @@ async function run() {
     app.get('/mycampaign/:email', async(req,res)=>{
       const userEmail = req?.params.email ; 
       const query = {userEmail: userEmail} ; 
-      const result = await database2.find(query).toArray()
+      const result = await campaignsCollection.find(query).toArray()
       res.send(result)
     })
+
+
+    
 
     //update
     // PUT: Update a campaign
