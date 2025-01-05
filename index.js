@@ -46,6 +46,36 @@ async function run() {
       }
     });
 
+
+    //donate post // card deailts
+  //   const { ObjectId } = require("mongodb");
+  //   app.get("/campaigns/:id", async (req, res) => {
+  //     const { id } = req.params;
+    
+  //     try {
+  //       const campaign = await campaignCollection.findOne({ _id: new ObjectId(id) });
+    
+  //       if (!campaign) {
+  //         return res.status(404).send({ message: "Campaign not found" });
+  //       }
+    
+  //       res.status(200).send(campaign);
+  //     } catch (error) {
+  //       console.error("Error fetching campaign:", error);
+  //       res.status(500).send({ message: "Internal Server Error" });
+  //     }
+  //   });
+    
+    
+
+  //   app.post('/donatedetails',async(req,res)=>{
+  //     const newCampaign = req.body; 
+  //     console.log("Successfully new campaign & user added", newCampaign); 
+  //     const result = await campaignsCollection.insertOne(newCampaign);
+  //     res.send(result)
+  // })
+    
+
     // GET: Fetch all campaigns
     app.get('/campaigns', async (req, res) => {
       try {
@@ -85,27 +115,29 @@ async function run() {
 
     //update
     // PUT: Update a campaign
-    app.put('/mycampaign/:id', async(req,res)=>{
-      const id = req.params.id;
-      const filter = {_id: new ObjectId(id)};
-      const options = {upsert: true};
-      const updatedUser = req.body;
-      const User = {
-        $set:{
-          imageURL:updatedUser.imageURL,
-          campaignTitle:updatedUser.campaignTitle,
-          campaignType:updatedUser.campaignType,
-          description:updatedUser.description,
-          minDonation:updatedUser.minDonation,
-          deadline:updatedUser.deadline,
-          userEmail:updatedUser.userEmail,
-          userName:updatedUser.userName
-        }
-      }
-      const result = await database.updateOne(filter,User,options);
-      res.send(result)
-    })
+    // app.put('/mycampaign/:id', async(req,res)=>{
+    //   const id = req.params.id;
+    //   const filter = {_id: new ObjectId(id)};
+    //   const options = {upsert: true};
+    //   const updatedUser = req.body;
+    //   const User = {
+    //     $set:{
+    //       imageURL:updatedUser.imageURL,
+    //       campaignTitle:updatedUser.campaignTitle,
+    //       campaignType:updatedUser.campaignType,
+    //       description:updatedUser.description,
+    //       minDonation:updatedUser.minDonation,
+    //       deadline:updatedUser.deadline,
+    //       userEmail:updatedUser.userEmail,
+    //       userName:updatedUser.userName
+    //     }
+    //   }
+    //   const result = await database.updateOne(filter,User,options);
+    //   res.send(result)
+    // })
 
+
+    
     
 
     // DELETE: Delete a campaign
@@ -125,6 +157,34 @@ async function run() {
         res.status(500).json({ message: "Failed to delete campaign." });
       }
     });
+
+
+    //update
+    app.get('/campaigns/:id', async(req, res)=>
+    {
+      const id=req.params.id;
+      const query={_id : new ObjectId(id)};
+      const result=await campaignsCollection.findOne(query);
+      res.send(result)
+    })
+
+
+    app.patch('/campaigns/:id', async(req, res)=>{
+      const id=req.params.id;
+      const data=req.body;
+      const query={_id : new ObjectId(id)};
+      const update={
+        $set:{
+          image:data.image,
+          title:data.title,
+          description:data.description,
+          minimumDonation:data.minimumDonation,
+          deadline:data.deadline
+        },
+      }
+      const result=await campaignsCollection.updateOne(query, update)
+      res.send(result)
+    })
 
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
