@@ -27,6 +27,7 @@ async function run() {
 
     const database = client.db("crowduble");
     const campaignsCollection = database.collection("campaigns");
+    const database2 = client.db("crowdcube").collection("donationdetails");
 
 
     app.post('/campaigns', async (req, res) => {
@@ -47,7 +48,7 @@ async function run() {
     });
 
 
-    //donate post // card deailts
+     // card deailts
   //   const { ObjectId } = require("mongodb");
   //   app.get("/campaigns/:id", async (req, res) => {
   //     const { id } = req.params;
@@ -106,35 +107,12 @@ async function run() {
     app.get('/mycampaign/:email', async(req,res)=>{
       const userEmail = req?.params.email ; 
       const query = {userEmail: userEmail} ; 
-      const result = await campaignsCollection.find(query).toArray()
+      const result = await database2.find(query).toArray()
       res.send(result)
     })
 
 
-    
-
-    //update
-    // PUT: Update a campaign
-    // app.put('/mycampaign/:id', async(req,res)=>{
-    //   const id = req.params.id;
-    //   const filter = {_id: new ObjectId(id)};
-    //   const options = {upsert: true};
-    //   const updatedUser = req.body;
-    //   const User = {
-    //     $set:{
-    //       imageURL:updatedUser.imageURL,
-    //       campaignTitle:updatedUser.campaignTitle,
-    //       campaignType:updatedUser.campaignType,
-    //       description:updatedUser.description,
-    //       minDonation:updatedUser.minDonation,
-    //       deadline:updatedUser.deadline,
-    //       userEmail:updatedUser.userEmail,
-    //       userName:updatedUser.userName
-    //     }
-    //   }
-    //   const result = await database.updateOne(filter,User,options);
-    //   res.send(result)
-    // })
+  
 
 
     
@@ -186,6 +164,36 @@ async function run() {
       res.send(result)
     })
 
+
+    //donte
+    // app.get('/donatinon/:id', async(req, res)=>
+    //   {
+    //     const id=req.params.id;
+    //     const query={_id : new ObjectId(id)};
+    //     const result=await campaignsCollection.findOne(query);
+    //     res.send(result)
+    //   })
+      app.post('/donattion',async(req,res)=>{
+        const newCampaign = req.body; 
+        console.log("Successfully new campaign & user added", newCampaign); 
+        const result = await database2.insertOne(newCampaign);
+        res.send(result)
+    })
+
+    app.get('/donation', async (req, res) => {
+      const { email } = req.query;
+      if (!email) {
+        return res.status(400).send({ message: "Email is required" });
+      }
+    
+      try {
+        const donations = await database2.find({ userEmail: email }).toArray();
+        res.send(donations);
+      } catch (error) {
+        res.status(500).send({ message: "Failed to fetch donations", error });
+      }
+    });
+    
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
