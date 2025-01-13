@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();
+
 const { MongoClient, ObjectId, ServerApiVersion } = require('mongodb');
 
 const app = express();
@@ -8,9 +10,13 @@ const port = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASS:', process.env.DB_PASS);
+
 
 // MongoDB Connection
-const uri = "mongodb+srv://Crowduble:ASICPiLF16smti51@cluster0.58jmc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.58jmc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.58jmc.mongodb.net/yourDatabaseName?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -76,6 +82,12 @@ async function run() {
   //     res.send(result)
   // })
     
+
+  app.get('/homecampaign', async(req,res) =>{
+    const cursor = campaignsCollection.find().limit(6);
+    const result = await cursor.toArray(); 
+    res.send(result)
+})
 
     // GET: Fetch all campaigns
     app.get('/campaigns', async (req, res) => {
