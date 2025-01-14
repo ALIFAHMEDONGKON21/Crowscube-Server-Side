@@ -10,8 +10,6 @@ const port = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_PASS:', process.env.DB_PASS);
 
 
 // MongoDB Connection
