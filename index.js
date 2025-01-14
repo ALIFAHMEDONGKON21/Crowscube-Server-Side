@@ -52,34 +52,7 @@ async function run() {
     });
 
 
-     // card deailts
-  //   const { ObjectId } = require("mongodb");
-  //   app.get("/campaigns/:id", async (req, res) => {
-  //     const { id } = req.params;
-    
-  //     try {
-  //       const campaign = await campaignCollection.findOne({ _id: new ObjectId(id) });
-    
-  //       if (!campaign) {
-  //         return res.status(404).send({ message: "Campaign not found" });
-  //       }
-    
-  //       res.status(200).send(campaign);
-  //     } catch (error) {
-  //       console.error("Error fetching campaign:", error);
-  //       res.status(500).send({ message: "Internal Server Error" });
-  //     }
-  //   });
-    
-    
-
-  //   app.post('/donatedetails',async(req,res)=>{
-  //     const newCampaign = req.body; 
-  //     console.log("Successfully new campaign & user added", newCampaign); 
-  //     const result = await campaignsCollection.insertOne(newCampaign);
-  //     res.send(result)
-  // })
-    
+ 
 
   app.get('/homecampaign', async(req,res) =>{
     const cursor = campaignsCollection.find().limit(6);
@@ -175,14 +148,7 @@ async function run() {
     })
 
 
-    //donte
-    // app.get('/donatinon/:id', async(req, res)=>
-    //   {
-    //     const id=req.params.id;
-    //     const query={_id : new ObjectId(id)};
-    //     const result=await campaignsCollection.findOne(query);
-    //     res.send(result)
-    //   })
+    
       app.post('/donattion',async(req,res)=>{
         const newCampaign = req.body; 
         console.log("Successfully new campaign & user added", newCampaign); 
